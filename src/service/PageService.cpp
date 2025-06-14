@@ -3,3 +3,6 @@
 //
 
 #include "PageService.h"
+
+std::map<String, Page*> PageService::pages = std::map<String, Page*>();
+AsyncWebServer* PageService::server = nullptr;

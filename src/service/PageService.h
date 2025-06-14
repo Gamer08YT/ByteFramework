@@ -51,8 +51,16 @@ public:
     {
         pages[path] = page;
 
-        server->on(path.c_str(), HTTP_GET, [=](AsyncWebServerRequest* request){
-            request->send(200, page->render());
+        server->on(path.c_str(), HTTP_GET, [=](AsyncWebServerRequest* request)
+        {
+            // Prepare custom response.
+            AsyncWebServerResponse* response = request->beginResponse(200, "text/html", page->render());
+
+            // Add Framework Header.
+            response->addHeader("X-Framework-Header", "ByteFramework");
+
+            // Send response to client.
+            request->send(response);
         });
 
         return page;
