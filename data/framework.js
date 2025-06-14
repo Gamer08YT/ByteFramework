@@ -1,3 +1,8 @@
+/**
+ * Framework class facilitates establishing and managing a WebSocket connection
+ * to a server, with automatic reconnection capabilities. It listens for specific
+ * message types to handle configuration updates or execute server-provided commands.
+ */
 class Framework {
     ws = null;
     isConnected = false;
@@ -5,8 +10,14 @@ class Framework {
     maxReconnectAttempts = 5;
     reconnectDelay = 3000;
 
+    /**
+     * Initializes a new instance of the class and establishes a WebSocket connection
+     * to the server using the current hostname.
+     *
+     * @return {void} This constructor does not return a value.
+     */
     constructor() {
-
+        this.connect("ws://${window.location.hostname}/ws");
     }
 
     /**
@@ -28,6 +39,23 @@ class Framework {
             this.ws.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
+
+                    switch (data.type) {
+                        case 'config':
+                            this.maxReconnectAttempts = data.value.maxReconnectAttempts;
+                            this.reconnectDelay = data.value.reconnectDelay;
+                            break;
+                        case 'welcome':
+                            // Register Listeners.
+                            console.log('Welcome message received');
+                            console.log(data.value);
+                            break;
+                        case 'eval':
+                            // I know EVAL is bad ;)
+                            eval(data.value);
+                            break;
+                    }
+
                     console.log('Received data:', data);
                 } catch (error) {
                     console.error('Error parsing message:', error);
@@ -70,5 +98,6 @@ class Framework {
         }
     }
 
-
 }
+
+new Framework();
