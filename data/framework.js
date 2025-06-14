@@ -29,10 +29,14 @@ class Framework {
      * @return {void} This method does not return any value.
      */
     sendPacket(type, value) {
-        this.ws.send(JSON.stringify({
+        const packet = JSON.stringify({
             "type": type,
             "value": value
-        }))
+        });
+
+        this.ws.send(packet);
+
+        console.log('Sent packet:', packet);
     }
 
     /**
@@ -50,9 +54,9 @@ class Framework {
                 this.reconnectAttempts = 0;
 
                 // Request Welcome Packet.
-                sendPacket("navigate", {
+                this.sendPacket("navigate", {
                     "route": window.location.pathname || "/";
-                })
+                });
 
                 console.log('Connected to WebSocket server');
             };
