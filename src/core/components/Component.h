@@ -6,6 +6,7 @@
 #define COMPONENT_H
 
 #include <Arduino.h>
+#include <map>
 
 /**
  * @class Component
@@ -14,6 +15,9 @@
  * This class provides a base for creating custom HTML components by defining
  * the basic structure and attributes such as `tag`, `id`, and `cssClass`.
  * It also provides methods for generating the HTML representation of the component.
+ *
+ * The Listener Map contains dynamically executed Actions from the Frontend.
+ * Currently, is no session support implemented.
  *
  * Derived classes must implement the `getContentHTML` method to define the specific
  * content structure within the component.
@@ -24,6 +28,7 @@ protected:
     String id;
     String cssClass;
     String tag;
+    std::map<String, std::function<void(String)>> listeners;
 
 public:
     /**
@@ -40,6 +45,39 @@ public:
     Component(String tag = "div", String id = "", String cssClass = "")
         : tag(tag), id(id), cssClass(cssClass)
     {
+    }
+
+
+    /**
+     * @brief Adds a listener for a specific event.
+     *
+     * Registers a callback function to be invoked when the specified event occurs.
+     *
+     * @param eventId A unique identifier representing the event to listen for.
+     * @param callback The function to be executed when the event with the given `eventId` is triggered. It takes a `String` parameter representing event-specific data.
+     */
+    void addListener(const String& eventId, std::function<void(String)> callback)
+    {
+        listeners[eventId] = callback;
+    }
+
+    /**
+     * @brief Triggers an event and executes the associated listener with the given data.
+     *
+     * This method looks up the specified event ID in the listeners map and, if a listener is found,
+     * invokes the listener function with the provided data.
+     *
+     * @param eventId The identifier of the event to trigger.
+     * @param data The data to pass to the listener associated with the event.
+     */
+    void triggerEvent(const String& eventId, const String& data)
+    {
+        auto it = listeners.find(eventId);
+
+        if (it != listeners.end())
+        {
+            it->second(data);
+        }
     }
 
     /**
