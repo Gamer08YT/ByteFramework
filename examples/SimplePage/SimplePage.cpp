@@ -22,8 +22,7 @@ void setup()
     // Begin Page Service.
     PageService::begin(&server);
 
-
-    // Build simple Page.
+    // Build a simple Page.
     auto index = PageService::addPage("/", new Page());
 
     index->setTitle("ESP32 Index");
