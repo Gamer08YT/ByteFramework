@@ -135,6 +135,19 @@ public:
         html += "</body>\n</html>\n";
         return html;
     }
+
+    /**
+     * @brief Retrieves the list of components associated with this object.
+     *
+     * This method returns a collection of components currently managed or owned
+     * by the object.
+     *
+     * @return A vector containing pointers to the components.
+     */
+    std::vector<Component*> getComponents()
+    {
+        return components;
+    }
 };
 
 #endif

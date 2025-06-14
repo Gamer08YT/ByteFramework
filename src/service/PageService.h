@@ -129,44 +129,58 @@ private:
                 }
 
                 // JSON Example: {"page": "/", "component": "test123","event": "click", "data": "xyz" }
-                const char* eventId = doc["event"];
-                const char* eventData = doc["data"];
+                const char* type = doc["type"];
+                const JsonObject value = doc["value"];
 
-                if (eventId != nullptr)
+                switch (type)
                 {
-                    // Try to get page by id.
-                    auto page = getPageById(String(doc["page"]));
+                case "navigate":
+                    sendPacket(client, "welcome", value);
 
-                    if (page != nullptr)
+                    break;
+                case "execute":
+                    const char* eventId = value["event"];
+                    const JsonObject eventData = value["data"];
+
+                    if (eventId != nullptr)
                     {
-                        // Try to get component by id.
-                        auto component = page->getComponentById(String(doc["component"]));
+                        // Try to get page by id.
+                        auto page = getPageById(String(doc["page"]));
 
-                        if (component != nullptr)
+                        if (page != nullptr)
                         {
-                            // Trigger the right listener of the component on the right page.
-                            component->triggerEvent(String(doc["event"]), doc["data"]);
+                            // Try to get component by id.
+                            auto component = page->getComponentById(String(doc["component"]));
 
-                            // Send response to client.
-                            sendMessage(client, false, "Event processed");
-                            client->text("{\"status\":\"Event processed\"}");
+                            if (component != nullptr)
+                            {
+                                // Trigger the right listener of the component on the right page.
+                                component->triggerEvent(String(eventId), eventData);
+
+                                // Send response to client.
+                                sendMessage(client, false, "Event processed");
+                            }
+                            else
+                            {
+                                // Send response to client.
+                                sendMessage(client, true, "Component not found");
+                            }
                         }
                         else
                         {
                             // Send response to client.
-                            client->text("{\"error\":\"Component not found\"}");
+                            sendMessage(client, true, "Page not found");
                         }
                     }
                     else
                     {
                         // Send response to client.
-                        client->text("{\"error\":\"Page not found\"}");
+                        sendMessage(client, true, "No event specified");
                     }
-                }
-                else
-                {
-                    // Send response to client.
-                    client->text("{\"error\":\"No event specified\"}");
+                    break;
+                default:
+                    sendMessage(client, true, "Unknown event type");
+                    break;
                 }
             }
         }
