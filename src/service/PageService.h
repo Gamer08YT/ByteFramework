@@ -29,15 +29,22 @@ private:
      */
     static AsyncWebServer* server;
 
+    static AsyncWebSocket socket;
+
 public:
     /**
      * Initializes and assigns the provided AsyncWebServer instance to the internal server.
+     *
+     * Add WebSocket Channel for Backend Communication on Route /ws.
      *
      * @param srv A pointer to the AsyncWebServer instance to be used by the system.
      */
     static void begin(AsyncWebServer* srv)
     {
         server = srv;
+
+        // Add WebSocket to AsyncServer.
+        server->addHandler(&socket);
     }
 
     /**
@@ -59,7 +66,7 @@ public:
             // Add Framework Header.
             response->addHeader("X-Framework", "ByteFramework");
 
-            // Send response to client.
+            // Send response to a client.
             request->send(response);
         });
 
