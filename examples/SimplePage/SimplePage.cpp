@@ -25,11 +25,20 @@ void setup()
     // Build a simple Page.
     auto index = PageService::addPage("/", new Page());
 
+    // Set Title of Page.
     index->setTitle("ESP32 Index");
+
+    // Add Label Component.
     index->addComponent(new Label("Test 123"));
 
-    // Add clickable Button:
+    // Add Button Component.
     auto button = index->addComponent(new Button("submit", "Click me!"));
+
+    // Add Click Listener to Button.
+    button->addListener("click", [](JsonObject data)
+    {
+        Serial.println("Button Clicked!");
+    });
 
 
 
