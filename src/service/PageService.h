@@ -39,6 +39,49 @@ private:
     static AsyncWebSocket socket;
 
     /**
+     * Sends a JSON-formatted message to an asynchronous WebSocket client.
+     *
+     * Constructs a message with a status and a text message, and sends it to the specified client.
+     *
+     * @param client The WebSocket client to which the message will be sent.
+     * @param error A flag indicating whether the message indicates an error (true) or success (false).
+     * @param str A null-terminated string containing the message content.
+     */
+    static void sendMessage(AsyncWebSocketClient* client, bool error, const char* str)
+    {
+        JsonObject value;
+
+        value["status"] = (error ? "error" : "success");
+        value["message"] = str;
+
+        sendPacket(client, "message", value);
+    }
+
+    /**
+     * Sends a packet to the specified WebSocket client with a given type and value.
+     *
+     * Constructs a JSON document containing the type and value, serializes it to a string,
+     * and sends the resulting string as a text message to the client.
+     *
+     * @param client A pointer to the AsyncWebSocketClient object representing the target client.
+     * @param type A string that specifies the type of the packet being sent.
+     * @param value A JsonObject that contains the value to be included in the packet.
+     */
+    static void sendPacket(AsyncWebSocketClient* client, String type, JsonObject value)
+    {
+        JsonDocument doc;
+
+        doc["type"] = type;
+        doc["value"] = value;
+
+        String result = "";
+
+        serializeJson(doc, result);
+
+        client->text(result);
+    }
+
+    /**
      * Handles WebSocket events by processing incoming messages, extracting information,
      * and triggering corresponding events within the application.
      *
@@ -104,6 +147,7 @@ private:
                             component->triggerEvent(String(doc["event"]), doc["data"]);
 
                             // Send response to client.
+                            sendMessage(client, false, "Event processed");
                             client->text("{\"status\":\"Event processed\"}");
                         }
                         else

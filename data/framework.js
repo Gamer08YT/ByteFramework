@@ -33,26 +33,35 @@ class Framework {
             this.ws.onopen = () => {
                 this.isConnected = true;
                 this.reconnectAttempts = 0;
+
                 console.log('Connected to WebSocket server');
             };
 
             this.ws.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
+                    const value = data.value;
 
+                    // Switch through incoming packets.
                     switch (data.type) {
                         case 'config':
-                            this.maxReconnectAttempts = data.value.maxReconnectAttempts;
-                            this.reconnectDelay = data.value.reconnectDelay;
+                            this.maxReconnectAttempts = value.maxReconnectAttempts;
+                            this.reconnectDelay = value.reconnectDelay;
                             break;
                         case 'welcome':
                             // Register Listeners.
                             console.log('Welcome message received');
-                            console.log(data.value);
+                            console.log(value);
+                            break;
+                        case 'message':
+                            console.log(value.message);
                             break;
                         case 'eval':
                             // I know EVAL is bad ;)
-                            eval(data.value);
+                            eval(value.value);
+                            break;
+                        case 'ping':
+                            this.ws.send('pong');
                             break;
                     }
 
