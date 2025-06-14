@@ -1,6 +1,6 @@
 #
 # Script by JetBrains AI Assistant.
-# (I hate Python)
+# (I hate Python 😈)
 #
 
 import os
