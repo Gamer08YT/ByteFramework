@@ -7,7 +7,7 @@
 
 #include <Arduino.h>
 #include <map>
-#include <ArduinoJson/Object/JsonObject.hpp>
+#include <ArduinoJson.h>
 
 /**
  * @class Component

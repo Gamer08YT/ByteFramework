@@ -4,9 +4,9 @@
 #include <Arduino.h>
 #include <WiFi.h>
 
-#include "../../src/service/PageService.h"
-#include "../../src/core/components/Button.h"
-#include "../../src/core/components/Label.h"
+#include "service/PageService.h"
+#include "core/components/Button.h"
+#include "core/components/Label.h"
 
 AsyncWebServer server(80);
 
