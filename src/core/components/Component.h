@@ -70,13 +70,56 @@ public:
      */
     void setTag(const String& newTag) { tag = newTag; }
 
+    /**
+     * @brief Retrieves the ID associated with this instance.
+     *
+     * This method returns the unique identifier of the object,
+     * allowing access to its associated `id` value.
+     *
+     * @return A string representing the object's ID.
+     */
     String getId() const { return id; }
+
+    /**
+     * @brief Retrieves the CSS class associated with the component.
+     *
+     * This method returns the CSS class name as a string,
+     * which can be used for styling purposes.
+     *
+     * @return The CSS class name of the component.
+     */
     String getClass() const { return cssClass; }
+
+    /**
+     * @brief Retrieves the tag name of the component.
+     *
+     * This method returns the HTML tag name associated with the component.
+     *
+     * @return The tag name as a String.
+     */
     String getTag() const { return tag; }
 
-    // Template-Methode: HTML-Tag mit Attributen generieren
+    /**
+     * @brief Generates the HTML content specific to the derived component.
+     *
+     * This pure virtual method must be implemented by derived classes to define
+     * the specific inner HTML content structure for the component. The method should
+     * return the component's encapsulated content in HTML format.
+     *
+     * @return A string representing the HTML content of the component.
+     */
     virtual String getContentHTML() = 0;
 
+    /**
+     * @brief Generates the HTML representation of the component.
+     *
+     * Constructs the HTML structure of the component using its tag, ID,
+     * and CSS class attributes. Derived classes are responsible for
+     * implementing the `getContentHTML` method, which defines the specific
+     * content to be inserted within the component.
+     *
+     * @return A string containing the full HTML representation of the component.
+     */
     virtual String toHTML()
     {
         String html = "<" + tag;
@@ -88,6 +131,12 @@ public:
         return html;
     }
 
+    /**
+     * @brief Virtual destructor for the Component class.
+     *
+     * Ensures proper cleanup of resources when a derived Component object is destroyed.
+     * Allows for polymorphic deletion when dealing with base class pointers.
+     */
     virtual ~Component()
     {
     }
