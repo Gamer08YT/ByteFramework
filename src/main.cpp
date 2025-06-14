@@ -1,8 +1,15 @@
+//
+// Created by JanHe on 14.06.2025.
+//
 #include <Arduino.h>
-void setup() {
-// write your initialization code here
+#include <core/Page.h>
+
+auto page = new Page("framework");
+
+void setup()
+{
 }
 
-void loop() {
-// write your code here
+void loop()
+{
 }
