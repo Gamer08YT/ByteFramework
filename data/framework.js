@@ -55,7 +55,7 @@ class Framework {
 
                 // Request Welcome Packet.
                 this.sendPacket("navigate", {
-                    "route": window.location.pathname || "/";
+                    "route": window.location.pathname
                 });
 
                 console.log('Connected to WebSocket server');
