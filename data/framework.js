@@ -21,6 +21,21 @@ class Framework {
     }
 
     /**
+     * Sends a packet of data over a WebSocket connection.
+     * The packet is formatted as a JSON string with the specified type and value.
+     *
+     * @param {string} type The type of the packet to be sent.
+     * @param {*} value The value associated with the packet.
+     * @return {void} This method does not return any value.
+     */
+    sendPacket(type, value) {
+        this.ws.send(JSON.stringify({
+            "type": type,
+            "value": value
+        }))
+    }
+
+    /**
      * Establishes a WebSocket connection to the specified URL.
      *
      * @param {string} url - The URL of the WebSocket server to connect to.
@@ -33,6 +48,11 @@ class Framework {
             this.ws.onopen = () => {
                 this.isConnected = true;
                 this.reconnectAttempts = 0;
+
+                // Request Welcome Packet.
+                sendPacket("navigate", {
+                    "route": window.location.pathname || "/";
+                })
 
                 console.log('Connected to WebSocket server');
             };
