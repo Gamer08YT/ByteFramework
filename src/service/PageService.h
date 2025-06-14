@@ -47,8 +47,8 @@ private:
      * @param data A pointer to the data payload received in the WebSocket message.
      * @param len The length of the data payload in bytes.
      */
-    void onWebSocketEvent(AsyncWebSocket* server, AsyncWebSocketClient* client,
-                          AwsEventType type, void* arg, uint8_t* data, size_t len)
+    static void onWebSocketEvent(AsyncWebSocket* server, AsyncWebSocketClient* client,
+                                 AwsEventType type, void* arg, uint8_t* data, size_t len)
     {
         if (type == WS_EVT_DATA)
         {
@@ -62,7 +62,7 @@ private:
                     msg += (char)data[i];
                 }
 
-                // ArduinoJson 7 or so allow dynamic deserialisiation.
+                // ArduinoJson 7 or so allow dynamic deserialization.
                 JsonDocument doc;
 
                 // Try to deserialize JSON Packet.
@@ -78,13 +78,29 @@ private:
                     return;
                 }
 
-                // JSON Example: {"page": ""/, "event": "click", "data": "xyz" }
+                // JSON Example: {"page": "/", "component": "test123","event": "click", "data": "xyz" }
                 const char* eventId = doc["event"];
                 const char* eventData = doc["data"];
 
                 if (eventId != nullptr)
                 {
-                    client->text("{\"status\":\"Event processed\"}");
+                    // Try to get page by id.
+                    auto page = getPageById(String(doc["page"]));
+
+                    if (page != nullptr)
+                    {
+                        // Try to get component by id.
+                        auto component = page->getComponentById(String(doc["component"]));
+
+                        client->text("{\"status\":\"Event processed\"}");
+
+
+                        myComponent.triggerEvent(String(eventId), eventData ? String(eventData) : "");
+                    }
+                    else
+                    {
+                        client->text("{\"error\":\"Page not found\"}");
+                    }
                 }
                 else
                 {
@@ -111,6 +127,27 @@ public:
 
         // Add WebSocket to AsyncServer.
         server->addHandler(&socket);
+    }
+
+    /**
+     * Retrieves a Page object corresponding to the given unique identifier string.
+     *
+     * Searches through the collection of pages and returns the Page object associated
+     * with the specified identifier, if it exists.
+     *
+     * @param id The unique identifier string for the Page to retrieve.
+     * @return A pointer to the Page object if found, or nullptr if no Page is associated with the given identifier.
+     */
+    static Page* getPageById(const String& id)
+    {
+        auto it = pages.find(id);
+
+        if (it != pages.end())
+        {
+            return it->second;
+        }
+
+        return nullptr; // Not found
     }
 
     /**

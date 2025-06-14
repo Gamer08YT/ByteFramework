@@ -169,6 +169,14 @@ public:
         return html;
     }
 
+        Component* getComponentById(const String& id) {
+        auto it = componentsById.find(id);
+        if (it != componentsById.end()) {
+            return it->second;
+        }
+        return nullptr;
+    }
+
     /**
      * @brief Virtual destructor for the Component class.
      *

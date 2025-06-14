@@ -62,6 +62,26 @@ public:
     }
 
     /**
+     * @brief Retrieves a component by its unique identifier.
+     *
+     * Searches through the list of components to find and return the component
+     * that matches the specified identifier. If no matching component is found,
+     * it returns a null pointer.
+     *
+     * @param id The unique identifier of the component to search for.
+     * @return A pointer to the component with the specified ID, or nullptr if no
+     *         matching component is found.
+     */
+    Component* getComponentById( const String& id) {
+        for (auto comp : components) {
+            if (comp->getId() == id) {
+                return comp;
+            }
+        }
+        return nullptr;
+    }
+
+    /**
      * @brief Generates the HTML content for the head section of a web page.
      *
      * This method creates a string representing the head section of an HTML document.
