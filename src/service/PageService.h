@@ -57,7 +57,7 @@ public:
             AsyncWebServerResponse* response = request->beginResponse(200, "text/html", page->render());
 
             // Add Framework Header.
-            response->addHeader("X-Framework-Header", "ByteFramework");
+            response->addHeader("X-Framework", "ByteFramework");
 
             // Send response to client.
             request->send(response);
