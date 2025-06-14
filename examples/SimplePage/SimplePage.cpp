@@ -27,7 +27,11 @@ void setup()
 
     index->setTitle("ESP32 Index");
     index->addComponent(new Label("Test 123"));
-    index->addComponent(new Button("submit", "Click me!"));
+
+    // Add clickable Button:
+    auto button = index->addComponent(new Button("submit", "Click me!"));
+
+
 
     // Begin Server.
     server.begin();

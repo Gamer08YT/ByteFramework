@@ -30,6 +30,12 @@ private:
      */
     static AsyncWebServer* server;
 
+    /**
+     * Represents an asynchronous WebSocket endpoint used for handling WebSocket connections.
+     *
+     * This WebSocket is associated with the specified endpoint path "/ws" and is used to
+     * facilitate communication between the client and the server in a non-blocking manner.
+     */
     static AsyncWebSocket socket;
 
     /**
@@ -94,11 +100,13 @@ private:
 
                         if (component != nullptr)
                         {
+                            // Trigger the right listener of the component on the right page.
                             component->triggerEvent(String(doc["event"]), doc["data"]);
 
                             // Send response to client.
                             client->text("{\"status\":\"Event processed\"}");
-                        } else
+                        }
+                        else
                         {
                             // Send response to client.
                             client->text("{\"error\":\"Component not found\"}");

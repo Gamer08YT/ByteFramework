@@ -7,6 +7,7 @@
 
 #include <Arduino.h>
 #include <map>
+#include <ArduinoJson/Object/JsonObject.hpp>
 
 /**
  * @class Component
@@ -28,7 +29,7 @@ protected:
     String id;
     String cssClass;
     String tag;
-    std::map<String, std::function<void(String)>> listeners;
+    std::map<String, std::function<void(ArduinoJson::JsonObject)>> listeners;
 
 public:
     /**
@@ -56,7 +57,7 @@ public:
      * @param eventId A unique identifier representing the event to listen for.
      * @param callback The function to be executed when the event with the given `eventId` is triggered. It takes a `String` parameter representing event-specific data.
      */
-    void addListener(const String& eventId, std::function<void(String)> callback)
+    void addListener(const String& eventId, std::function<void(ArduinoJson::JsonObject)> callback)
     {
         listeners[eventId] = callback;
     }
@@ -70,7 +71,7 @@ public:
      * @param eventId The identifier of the event to trigger.
      * @param data The data to pass to the listener associated with the event.
      */
-    void triggerEvent(const String& eventId, const String& data)
+    void triggerEvent(const String& eventId, const ArduinoJson::JsonObject& data)
     {
         auto it = listeners.find(eventId);
 
@@ -167,14 +168,6 @@ public:
         html += getContentHTML();
         html += "</" + tag + ">";
         return html;
-    }
-
-        Component* getComponentById(const String& id) {
-        auto it = componentsById.find(id);
-        if (it != componentsById.end()) {
-            return it->second;
-        }
-        return nullptr;
     }
 
     /**

@@ -49,16 +49,19 @@ public:
     }
 
     /**
-     * @brief Adds a new component to the list of components.
+     * @brief Adds a component to the list of components.
      *
-     * This method appends the given component to the internal collection of components.
-     * It ensures the component is stored for further processing or usage.
+     * This method appends a new component to the internal collection of components
+     * and returns the added component.
      *
-     * @param c A pointer to the component to be added.
+     * @param c The component to be added.
+     * @return A pointer to the component that was added.
      */
-    void addComponent(Component* c)
+    Component* addComponent(Component* c)
     {
         components.push_back(c);
+
+        return c;
     }
 
     /**
