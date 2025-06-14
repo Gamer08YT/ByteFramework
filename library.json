@@ -18,7 +18,8 @@
   "license": "MIT",
   "homepage": "https://www.byte-store.de/byteframework",
   "dependencies": {
-    "ESP32Async/ESPAsyncWebServer": "~3.7.8"
+    "ESP32Async/ESPAsyncWebServer": "~3.7.8",
+    "bblanchon/ArduinoJson": "~7.4.1"
   },
   "frameworks": "arduino",
   "platforms": "espressif32"

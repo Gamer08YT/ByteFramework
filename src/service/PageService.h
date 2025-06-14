@@ -9,6 +9,7 @@
 #include <Arduino.h>
 #include <ESPAsyncWebServer.h>
 #include <core/Page.h>
+#include <ArduinoJson.h>
 
 class PageService
 {
@@ -31,6 +32,68 @@ private:
 
     static AsyncWebSocket socket;
 
+    /**
+     * Handles WebSocket events by processing incoming messages, extracting information,
+     * and triggering corresponding events within the application.
+     *
+     * This method is intended to process specific types of WebSocket events, such as
+     * incoming text messages, and handle them accordingly by parsing JSON content and
+     * executing associated logic.
+     *
+     * @param server A pointer to the AsyncWebSocket instance managing the WebSocket server.
+     * @param client A pointer to the AsyncWebSocketClient instance representing the connected client.
+     * @param type The type of WebSocket event being triggered (e.g., WS_EVT_DATA).
+     * @param arg A void pointer to additional arguments associated with the event (e.g., frame details).
+     * @param data A pointer to the data payload received in the WebSocket message.
+     * @param len The length of the data payload in bytes.
+     */
+    void onWebSocketEvent(AsyncWebSocket* server, AsyncWebSocketClient* client,
+                          AwsEventType type, void* arg, uint8_t* data, size_t len)
+    {
+        if (type == WS_EVT_DATA)
+        {
+            AwsFrameInfo* info = (AwsFrameInfo*)arg;
+
+            if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT)
+            {
+                String msg = "";
+                for (size_t i = 0; i < len; i++)
+                {
+                    msg += (char)data[i];
+                }
+
+                // ArduinoJson 7 or so allow dynamic deserialisiation.
+                JsonDocument doc;
+
+                // Try to deserialize JSON Packet.
+                deserializeJson(doc, msg);
+
+                DeserializationError error = deserializeJson(doc, msg);
+
+                if (error)
+                {
+                    Serial.print(F("deserializeJson() failed: "));
+                    Serial.println(error.f_str());
+                    client->text("{\"error\":\"Invalid JSON\"}");
+                    return;
+                }
+
+                // JSON Example: {"page": ""/, "event": "click", "data": "xyz" }
+                const char* eventId = doc["event"];
+                const char* eventData = doc["data"];
+
+                if (eventId != nullptr)
+                {
+                    client->text("{\"status\":\"Event processed\"}");
+                }
+                else
+                {
+                    client->text("{\"error\":\"No event specified\"}");
+                }
+            }
+        }
+    }
+
 public:
     /**
      * Initializes and assigns the provided AsyncWebServer instance to the internal server.
@@ -42,6 +105,9 @@ public:
     static void begin(AsyncWebServer* srv)
     {
         server = srv;
+
+        // Register Channel Listener.
+        socket.onEvent(onWebSocketEvent);
 
         // Add WebSocket to AsyncServer.
         server->addHandler(&socket);
