@@ -92,18 +92,27 @@ private:
                         // Try to get component by id.
                         auto component = page->getComponentById(String(doc["component"]));
 
-                        client->text("{\"status\":\"Event processed\"}");
+                        if (component != nullptr)
+                        {
+                            component->triggerEvent(String(doc["event"]), doc["data"]);
 
-
-                        myComponent.triggerEvent(String(eventId), eventData ? String(eventData) : "");
+                            // Send response to client.
+                            client->text("{\"status\":\"Event processed\"}");
+                        } else
+                        {
+                            // Send response to client.
+                            client->text("{\"error\":\"Component not found\"}");
+                        }
                     }
                     else
                     {
+                        // Send response to client.
                         client->text("{\"error\":\"Page not found\"}");
                     }
                 }
                 else
                 {
+                    // Send response to client.
                     client->text("{\"error\":\"No event specified\"}");
                 }
             }
