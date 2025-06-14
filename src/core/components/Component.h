@@ -29,7 +29,7 @@ protected:
     String id;
     String cssClass;
     String tag;
-    std::map<String, std::function<void(ArduinoJson::JsonObject)>> listeners;
+    std::map<String, std::function<void(JsonObject)>> listeners;
 
 public:
     /**
@@ -57,7 +57,7 @@ public:
      * @param eventId A unique identifier representing the event to listen for.
      * @param callback The function to be executed when the event with the given `eventId` is triggered. It takes a `String` parameter representing event-specific data.
      */
-    void addListener(const String& eventId, std::function<void(ArduinoJson::JsonObject)> callback)
+    void addListener(const String& eventId, std::function<void(JsonObject)> callback)
     {
         listeners[eventId] = callback;
     }
@@ -71,7 +71,7 @@ public:
      * @param eventId The identifier of the event to trigger.
      * @param data The data to pass to the listener associated with the event.
      */
-    void triggerEvent(const String& eventId, const ArduinoJson::JsonObject& data)
+    void triggerEvent(const String& eventId, const JsonObject& data)
     {
         auto it = listeners.find(eventId);
 

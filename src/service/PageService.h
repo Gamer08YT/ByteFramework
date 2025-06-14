@@ -132,13 +132,12 @@ private:
                 const char* type = doc["type"];
                 const JsonObject value = doc["value"];
 
-                switch (type)
+                if (type == "navigate")
                 {
-                case "navigate":
                     sendPacket(client, "welcome", value);
-
-                    break;
-                case "execute":
+                }
+                else if (type == "execute")
+                {
                     const char* eventId = value["event"];
                     const JsonObject eventData = value["data"];
 
@@ -155,7 +154,7 @@ private:
                             if (component != nullptr)
                             {
                                 // Trigger the right listener of the component on the right page.
-                                component->triggerEvent(String(eventId), eventData);
+                                component->triggerEvent(eventId, eventData);
 
                                 // Send response to client.
                                 sendMessage(client, false, "Event processed");
@@ -177,10 +176,10 @@ private:
                         // Send response to client.
                         sendMessage(client, true, "No event specified");
                     }
-                    break;
-                default:
+                }
+                else
+                {
                     sendMessage(client, true, "Unknown event type");
-                    break;
                 }
             }
         }

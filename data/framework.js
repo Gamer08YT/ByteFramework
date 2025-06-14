@@ -53,12 +53,12 @@ class Framework {
                 this.isConnected = true;
                 this.reconnectAttempts = 0;
 
+                console.log('Connected to WebSocket server');
+
                 // Request Welcome Packet.
                 this.sendPacket("navigate", {
                     "route": window.location.pathname
                 });
-
-                console.log('Connected to WebSocket server');
             };
 
             this.ws.onmessage = (event) => {

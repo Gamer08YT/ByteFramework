@@ -41,6 +41,8 @@ def kopiere_dateien(quell_pfad, ziel_pfad):
 if __name__ == "__main__":
     # Definiere Quell- und Zielpfade
     quell_pfad = "./data"
+
+    # I know it's dirty but Import("env") is not working for me ;/
     ziel_pfad = os.path.abspath(os.path.join(os.getcwd(), "../../../../data"))
 
 
