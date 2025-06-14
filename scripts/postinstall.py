@@ -1,3 +1,4 @@
+Import('env')
 #
 # Script by JetBrains AI Assistant.
 # (I hate Python 😈)
@@ -40,7 +41,7 @@ def kopiere_dateien(quell_pfad, ziel_pfad):
 
 if __name__ == "__main__":
     # Hole die Umgebungsvariable oder setze einen Standardwert
-    project_data_dir = os.getenv("PROJECTDATA_DIR", "standard_ziel_verzeichnis")
+    project_data_dir = env.subst("$PROJECTDATA_DIR")
 
     # Definiere Quell- und Zielpfade
     quell_pfad = "./data"
