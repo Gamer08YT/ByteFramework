@@ -15,6 +15,9 @@
       "maintainer": true
     }
   ],
+  "scripts": {
+    "postinstall": "scripts/postinstall.py"
+  },
   "license": "MIT",
   "homepage": "https://www.byte-store.de/byteframework",
   "dependencies": {

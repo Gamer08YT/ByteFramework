@@ -17,7 +17,7 @@ class Framework {
      * @return {void} This constructor does not return a value.
      */
     constructor() {
-        this.connect("ws://${window.location.hostname}/ws");
+        this.connect("ws://" + window.location.hostname + "/ws");
     }
 
     /**

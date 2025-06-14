@@ -7,6 +7,7 @@
 
 #include <map>
 #include <Arduino.h>
+#include <SPIFFS.h>
 #include <ESPAsyncWebServer.h>
 #include <core/Page.h>
 #include <ArduinoJson.h>
@@ -181,10 +182,19 @@ public:
      */
     static void begin(AsyncWebServer* srv)
     {
+        if (!SPIFFS.begin(true))
+        {
+            Serial.println("Fehler beim Mounten von SPIFFS");
+            return;
+        }
+
         server = srv;
 
         // Register Channel Listener.
         socket.onEvent(onWebSocketEvent);
+
+        // Service Static Files.
+        server->serveStatic("/static", SPIFFS, "/");
 
         // Add WebSocket to AsyncServer.
         server->addHandler(&socket);

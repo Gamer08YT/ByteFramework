@@ -75,9 +75,12 @@ public:
      * @return A pointer to the component with the specified ID, or nullptr if no
      *         matching component is found.
      */
-    Component* getComponentById( const String& id) {
-        for (auto comp : components) {
-            if (comp->getId() == id) {
+    Component* getComponentById(const String& id)
+    {
+        for (auto comp : components)
+        {
+            if (comp->getId() == id)
+            {
                 return comp;
             }
         }
@@ -101,6 +104,8 @@ public:
 
         // Placeholder for custom CSS (not implemented).
         head += "<style>body { font-family: Arial, sans-serif; margin: 10px; }</style>\n";
+
+        head += "<script src='/static/framework.js'></script>\n";
 
         // Todo: Add JS and other things to header.
 
