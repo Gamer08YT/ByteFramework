@@ -2,19 +2,19 @@
 // Created by JanHe on 15.06.2025.
 //
 
-#ifndef INPUT_COMPONENT_H
-#define INPUT_COMPONENT_H
+#ifndef INPUT_H
+#define INPUT_H
 
 #include "Component.h"
 
-class InputComponent : public Component {
+class Input : public Component {
 private:
     String type;
     String value;
     String placeholder;
 
 public:
-    InputComponent(const String& id, const String& type = "text", const String& placeholder = "", const String& cssClass = "")
+    Input(const String& id, const String& type = "text", const String& placeholder = "", const String& cssClass = "")
       : Component("input", id, cssClass), type(type), placeholder(placeholder) {}
 
     void setValue(const String& val) { value = val; }

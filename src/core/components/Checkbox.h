@@ -2,17 +2,17 @@
 // Created by JanHe on 15.06.2025.
 //
 
-#ifndef CHECKBOX_COMPONENT_H
-#define CHECKBOX_COMPONENT_H
+#ifndef CHECKBOX_H
+#define CHECKBOX_H
 
 #include "Component.h"
 
-class CheckboxComponent : public Component {
+class Checkbox : public Component {
 private:
     bool checked;
 
 public:
-    CheckboxComponent(String id, bool checked = false, String cssClass = "")
+    Checkbox(String id, bool checked = false, String cssClass = "")
       : Component("input", id, cssClass), checked(checked) {}
 
     void setChecked(bool c) { checked = c; }

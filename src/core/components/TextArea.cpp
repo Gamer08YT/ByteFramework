@@ -2,4 +2,4 @@
 // Created by JanHe on 15.06.2025.
 //
 
-#include "TextAreaComponent.h"
+#include "TextArea.h"

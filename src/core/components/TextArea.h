@@ -2,18 +2,18 @@
 // Created by JanHe on 15.06.2025.
 //
 
-#ifndef TEXTAREA_COMPONENT_H
-#define TEXTAREA_COMPONENT_H
+#ifndef TEXTAREA_H
+#define TEXTAREA_H
 
 #include "Component.h"
 
-class TextAreaComponent : public Component {
+class TextArea : public Component {
 private:
     String value;
     int rows, cols;
 
 public:
-    TextAreaComponent(String id, int rows = 4, int cols = 40, String cssClass = "")
+    TextArea(String id, int rows = 4, int cols = 40, String cssClass = "")
       : Component("textarea", id, cssClass), rows(rows), cols(cols) {}
 
     void setValue(const String& val) { value = val; }
