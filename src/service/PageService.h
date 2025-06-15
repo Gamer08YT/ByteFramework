@@ -301,6 +301,28 @@ public:
 
         return page;
     }
+
+    /**
+     * Executes a command string on all connected clients by sending it
+     * as a JSON packet.
+     *
+     * Iterates through the list of connected clients retrieved from the
+     * socket and sends a JSON-encoded packet containing the specified
+     * command for evaluation.
+     *
+     * @param cmd The command string to be evaluated and sent to clients.
+     */
+    static void eval(const String cmd)
+    {
+        for (auto client : socket.getClients())
+        {
+            JsonDocument doc;
+
+            doc["value"] = cmd;
+
+            sendPacket(client, "eval", doc);
+        }
+    }
 };
 
 #endif

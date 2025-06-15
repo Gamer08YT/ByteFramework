@@ -37,7 +37,11 @@ void setup()
     // Add Click Listener to Button.
     button->addListener("click", [](JsonObject data)
     {
+        // Print to Serial.
         Serial.println("Button Clicked!");
+
+        // Print Console Log in Frontend.
+        PageService::eval("console.log('Button clicked!');");
     });
 
 
