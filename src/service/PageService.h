@@ -134,7 +134,44 @@ private:
 
                 if (type.equalsIgnoreCase("navigate"))
                 {
-                    sendPacket(client, "welcome", value);
+                    JsonDocument listeners;
+
+                    // page => /
+                    // listeners => componentId
+                    //              - click
+                    //              - change
+
+
+                    // Get Page by Route.
+                    auto page = getPageById(String(doc["page"]));
+
+                    if (page != nullptr)
+                    {
+                        // Loop trough Site Components.
+                        for (auto component : page->getComponents())
+                        {
+                            // Check if Component has a Listener.
+                            if (component->hasListeners())
+                            {
+                                // Create JsonObject wich holds Listeners Object.
+                                JsonArray object = listeners[component->getId()].to<JsonArray>();
+
+                                // Loop trough Listeners and add them to Component ID Array.
+                                for (auto listener : component->getListener())
+                                {
+                                    object.add(listener.first.c_str());
+                                }
+                            }
+                        }
+
+                        // Send Welcome Packet (Listener Registration Packet).
+                        sendPacket(client, "welcome", listeners);
+                    }
+                    else
+                    {
+                        // Send response to client.
+                        sendMessage(client, true, "Page not found");
+                    }
                 }
                 else if (type.equalsIgnoreCase("execute"))
                 {

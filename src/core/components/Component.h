@@ -179,6 +179,34 @@ public:
     virtual ~Component()
     {
     }
+
+    /**
+     * @brief Checks if the component has any registered listeners.
+     *
+     * This method determines whether there are any listeners currently associated
+     * with the component by evaluating the size of the listeners collection.
+     *
+     * @return True if there is at least one registered listener; otherwise, false.
+     */
+    bool hasListeners()
+    {
+        return sizeof listeners > 0;
+    }
+
+    /**
+     * @brief Retrieves a map of listeners for handling JSON object actions.
+     *
+     * This method returns a map containing keys as string identifiers and
+     * values as corresponding function callbacks. These callbacks handle
+     * actions represented by JSON objects.
+     *
+     * @return A map where keys are string identifiers and values are
+     *         std::function<void(JsonObject)> representing action handlers.
+     */
+    std::map<String, std::function<void(JsonObject)>> getListener()
+    {
+        return listeners;
+    }
 };
 
 #endif
