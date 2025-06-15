@@ -40,8 +40,8 @@ void setup()
         // Print to Serial.
         Serial.println("Button Clicked!");
 
-        // Print Console Log in Frontend.
-        PageService::eval("console.log('Button clicked!');");
+        // Alert in Frontend.
+        PageService::eval("alert('Response from Backend!');");
     });
 
 
