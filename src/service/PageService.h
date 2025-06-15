@@ -50,7 +50,7 @@ private:
      */
     static void sendMessage(AsyncWebSocketClient* client, bool error, const char* str)
     {
-        JsonObject value;
+        JsonDocument value;
 
         value["status"] = (error ? "error" : "success");
         value["message"] = str;
@@ -68,7 +68,7 @@ private:
      * @param type A string that specifies the type of the packet being sent.
      * @param value A JsonObject that contains the value to be included in the packet.
      */
-    static void sendPacket(AsyncWebSocketClient* client, String type, JsonObject value)
+    static void sendPacket(AsyncWebSocketClient* client, String type, JsonDocument value)
     {
         JsonDocument doc;
 
@@ -128,15 +128,15 @@ private:
                     return;
                 }
 
-                // JSON Example: {"page": "/", "component": "test123","event": "click", "data": "xyz" }
-                const char* type = doc["type"];
+                // JSON Example: {"type": "execute", "value": {"page": "/", "component": "test123","event": "click", "data": "xyz" }}
+                const String type = String(doc["type"]);
                 const JsonObject value = doc["value"];
 
-                if (type == "navigate")
+                if (type.equalsIgnoreCase("navigate"))
                 {
                     sendPacket(client, "welcome", value);
                 }
-                else if (type == "execute")
+                else if (type.equalsIgnoreCase("execute"))
                 {
                     const char* eventId = value["event"];
                     const JsonObject eventData = value["data"];
@@ -180,6 +180,7 @@ private:
                 else
                 {
                     sendMessage(client, true, "Unknown event type");
+                    sendMessage(client, true, type.c_str());
                 }
             }
         }
