@@ -73,8 +73,25 @@ class Framework {
                             this.reconnectDelay = value.reconnectDelay;
                             break;
                         case 'welcome':
-                            // Register Listeners.
+                            // Register Listeners {"type":"welcome","value":{"Click me!":["click"]}}).
                             console.log('Welcome message received');
+
+                            for (const [key, actions] of Object.entries(value)) {
+                                for (const action of actions) {
+                                    document.getElementById(key).addEventListener(action, () => {
+                                        // - Client: {"type": "execute", "value": {"route": "/", "component": "test123","event": "click", "data": "xyz" }}
+                                        this.sendPacket("execute", {
+                                            "route": window.location.pathname,
+                                            "component": key,
+                                            "event": action,
+                                            "data": ""
+                                        });
+                                    });
+
+                                    console.log(key, action);
+                                }
+                            }
+
                             console.log(value);
                             break;
                         case 'message':
