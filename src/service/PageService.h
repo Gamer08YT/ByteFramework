@@ -128,10 +128,12 @@ private:
                     return;
                 }
 
-                // JSON Example: {"type": "execute", "value": {"route": "/", "component": "test123","event": "click", "data": "xyz" }}
                 const String type = String(doc["type"]);
                 const JsonObject value = doc["value"];
 
+                // Example:
+                // - Client: {"type":"navigate","value":{"route":"/"}}
+                // - Server: {"type":"message","value":{"status":"error","message":"Page not found"}}
                 if (type.equalsIgnoreCase("navigate"))
                 {
                     JsonDocument listeners;
@@ -143,7 +145,7 @@ private:
 
 
                     // Get Page by Route.
-                    auto page = getPageById(String(doc["route"]));
+                    auto page = getPageById(String(value["route"]));
 
                     if (page != nullptr)
                     {
@@ -151,7 +153,7 @@ private:
                         for (auto component : page->getComponents())
                         {
                             // Check if Component has a Listener.
-                            if (component->hasListeners())
+                            if (component->hasListeners() && component->getId() != "")
                             {
                                 // Create JsonObject wich holds Listeners Object.
                                 JsonArray object = listeners[component->getId()].to<JsonArray>();
@@ -173,6 +175,8 @@ private:
                         sendMessage(client, true, "Page not found");
                     }
                 }
+                // Example:
+                // - Client: {"type": "execute", "value": {"route": "/", "component": "test123","event": "click", "data": "xyz" }}
                 else if (type.equalsIgnoreCase("execute"))
                 {
                     const char* eventId = value["event"];
@@ -181,12 +185,12 @@ private:
                     if (eventId != nullptr)
                     {
                         // Try to get page by id.
-                        auto page = getPageById(String(doc["route"]));
+                        auto page = getPageById(String(value["route"]));
 
                         if (page != nullptr)
                         {
                             // Try to get component by id.
-                            auto component = page->getComponentById(String(doc["component"]));
+                            auto component = page->getComponentById(String(value["component"]));
 
                             if (component != nullptr)
                             {

@@ -190,7 +190,7 @@ public:
      */
     bool hasListeners()
     {
-        return sizeof listeners > 0;
+        return listeners.size() > 0;
     }
 
     /**
