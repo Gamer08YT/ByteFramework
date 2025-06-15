@@ -1,6 +1,6 @@
 {
   "name": "ByteFramework",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ByteFramework is a lightweight, modular web framework that allows you to create an interactive web interface in just a few steps - without any in-depth frontend knowledge. Ideal for prototypes, dashboards, admin panels or quick MVPs.",
   "keywords": "websocket, http, web",
   "repository": {

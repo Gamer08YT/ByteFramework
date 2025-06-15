@@ -320,7 +320,7 @@ public:
 
             doc["value"] = cmd;
 
-            sendPacket(client, "eval", doc);
+            sendPacket(&client, "eval", doc);
         }
     }
 };
