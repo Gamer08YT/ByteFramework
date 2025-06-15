@@ -128,7 +128,7 @@ private:
                     return;
                 }
 
-                // JSON Example: {"type": "execute", "value": {"page": "/", "component": "test123","event": "click", "data": "xyz" }}
+                // JSON Example: {"type": "execute", "value": {"route": "/", "component": "test123","event": "click", "data": "xyz" }}
                 const String type = String(doc["type"]);
                 const JsonObject value = doc["value"];
 
@@ -143,7 +143,7 @@ private:
 
 
                     // Get Page by Route.
-                    auto page = getPageById(String(doc["page"]));
+                    auto page = getPageById(String(doc["route"]));
 
                     if (page != nullptr)
                     {
@@ -181,7 +181,7 @@ private:
                     if (eventId != nullptr)
                     {
                         // Try to get page by id.
-                        auto page = getPageById(String(doc["page"]));
+                        auto page = getPageById(String(doc["route"]));
 
                         if (page != nullptr)
                         {
