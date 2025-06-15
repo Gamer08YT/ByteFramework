@@ -314,7 +314,7 @@ public:
      */
     static void eval(const String cmd)
     {
-        for (auto client : socket.getClients())
+        for (auto& client : socket.getClients())
         {
             JsonDocument doc;
 
