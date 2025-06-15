@@ -6,6 +6,7 @@
 
 #include "service/PageService.h"
 #include "core/components/Button.h"
+#include <core/components/TextArea.h>
 #include "core/components/Label.h"
 
 AsyncWebServer server(80);
@@ -44,7 +45,15 @@ void setup()
         PageService::eval("alert('Response from Backend!');");
     });
 
+    // Add TextArea Component
+    auto textArea = index->addComponent(new TextArea("description"));
 
+    // Add Change Listener to TextArea.
+    textArea->addListener("change", [](JsonObject data)
+    {
+        // Alert in Frontend.
+        PageService::eval("alert('Response from Backend!');");
+    });
 
     // Begin Server.
     server.begin();
